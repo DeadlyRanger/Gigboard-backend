@@ -87,3 +87,24 @@ export const logout = (req, res) => {
     message: "Logout successful"
   });
 };
+
+export const getClientDashboard = async (req, res) => {
+  try {
+    // req.user.id is available because of 'protect' middleware
+    const userId = req.user.id; 
+
+    // Fetch projects posted by this user (Assuming you have a Gig model)
+    const projects = await Gig.find({ creator: userId });
+
+    // Calculate basic stats
+    const stats = {
+      totalInvestment: projects.reduce((acc, curr) => acc + (curr.budget || 0), 0),
+      activeProjects: projects.filter(p => p.status === 'open').length,
+      completedProjects: projects.filter(p => p.status === 'completed').length,
+    };
+
+    res.json({ success: true, stats, projects });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
