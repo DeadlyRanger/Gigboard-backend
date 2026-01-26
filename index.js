@@ -38,8 +38,8 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/gigs", gigRoutes);
 app.use("/api/bids", bidRoutes);
-app.use('/api/healthyz',()=>{
-   console.log(`backend working properly`)
+app.use('/api/healthyz',(req,res)=>{
+   res.send(`backend working properly`)
 })
 /* ================= SERVER ================= */
 app.listen(PORT, async () => {
